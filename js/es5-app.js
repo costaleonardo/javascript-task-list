@@ -15,7 +15,7 @@ function getTasks () {
   var tasks;
   // Check if storage is empty
   if (localStorage.getItem('tasks') === null) {
-    task = [];
+    tasks = [];
   } else {
     // Pass exisiting tasks to variable
     tasks = JSON.parse(localStorage.getItem('tasks'));
@@ -84,27 +84,47 @@ function addTask (e) {
   // Prevent default behaviour
   e.preventDefault();
 
-  // Validate
-  if (taskInput.value === '') {
-    alert('Add a task');
+  var tasks;
+  var state = false;
+
+  if (localStorage.getItem('tasks') === null) {
+      tasks = [];
+  } else {
+    tasks = JSON.parse(localStorage.getItem('tasks'));
   }
 
-  var li = document.createElement('li');
-  li.className = 'collection-item';
-  li.appendChild(document.createTextNode(taskInput.value));
+  // Validate for task with existing name
+  tasks.forEach(function(task, index) {
+    if (task === taskInput.value) {
+      alert('Task already exists.');
+      state = true;
+    }
+  });
 
-  var link = document.createElement('a');
-  link.className = 'delete-item secondary-content';
-  link.innerHTML = '<i class="fa fa-remove"></i>';
-  li.appendChild(link);
+  if (state === false) {
+    // Validate
+    if (taskInput.value === '') {
+      alert('Add a task.');
+    }
 
-  taskList.appendChild(li);
+    var li = document.createElement('li');
+    li.className = 'collection-item';
+    li.appendChild(document.createTextNode(taskInput.value));
 
-  // Store in localStorage
-  storeTaskInLocalStorage(taskInput.value);
+    var link = document.createElement('a');
+    link.className = 'delete-item secondary-content';
+    link.innerHTML = '<i class="fa fa-remove"></i>';
+    li.appendChild(link);
 
-  // Clear taskInput
-  taskInput.value = '';
+    taskList.appendChild(li);
+
+    // Store in localStorage
+    storeTaskInLocalStorage(taskInput.value);
+
+    // Clear taskInput
+    taskInput.value = '';
+  }
+
 }
 
 // Remove task
