@@ -13,7 +13,7 @@ const form = document.querySelector('#task-form'),
 // Get tasks from localStorage
 const getTasks = () => {
   // Create variable for tasks
-  const tasks;
+  let tasks;
   // Check if storage is empty
   if (localStorage.getItem('tasks') === null) {
     task = [];
@@ -85,27 +85,47 @@ const addTask = e => {
   // Prevent default behaviour
   e.preventDefault();
 
-  // Validate
-  if (taskInput.value === '') {
-    alert('Add a task');
+  let tasks;
+  let state = false;
+
+  if (localStorage.getItem('tasks') === null) {
+      tasks = [];
+  } else {
+    tasks = JSON.parse(localStorage.getItem('tasks'));
   }
 
-  const li = document.createElement('li');
-  li.className = 'collection-item';
-  li.appendChild(document.createTextNode(taskInput.value));
+  // Validate for task with existing name
+  tasks.forEach(function(task, index) {
+    if (task === taskInput.value) {
+      alert('Task already exists.');
+      state = true;
+    }
+  });
 
-  const link = document.createElement('a');
-  link.className = 'delete-item secondary-content';
-  link.innerHTML = '<i class="fa fa-remove"></i>';
-  li.appendChild(link);
+  if (state === false) {
+    // Validate
+    if (taskInput.value === '') {
+      alert('Add a task.');
+    }
 
-  taskList.appendChild(li);
+    const li = document.createElement('li');
+    li.className = 'collection-item';
+    li.appendChild(document.createTextNode(taskInput.value));
 
-  // Store in localStorage
-  storeTaskInLocalStorage(taskInput.value);
+    const link = document.createElement('a');
+    link.className = 'delete-item secondary-content';
+    link.innerHTML = '<i class="fa fa-remove"></i>';
+    li.appendChild(link);
 
-  // Clear taskInput
-  taskInput.value = '';
+    taskList.appendChild(li);
+
+    // Store in localStorage
+    storeTaskInLocalStorage(taskInput.value);
+
+    // Clear taskInput
+    taskInput.value = '';
+  }
+
 };
 
 // Remove task
@@ -121,7 +141,7 @@ const removeTask = e => {
   }
 };
 
-const clearTask = () => {
+const clearTasks = () => {
   while (taskList.firstChild) {
     taskList.removeChild(taskList.firstChild);
   }
