@@ -154,7 +154,7 @@ function filterTasks (e) {
   var text = e.target.value.toLowerCase();
 
   // Iterate throught all tasks and validate
-  document.querySelectorAll('.collection-item').forEach(function () {
+  document.querySelectorAll('.collection-item').forEach(function (itemm) {
     var item = task.firstChild.textContent;
 
     // Check for index
