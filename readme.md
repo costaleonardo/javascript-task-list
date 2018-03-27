@@ -4,7 +4,7 @@
 
 ## Getting Started
 
-Clone or download ZIP and open inex.html.
+Clone or download ZIP and open index.html.
 
 ## License
 
